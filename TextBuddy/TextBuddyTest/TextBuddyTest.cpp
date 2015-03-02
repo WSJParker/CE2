@@ -30,6 +30,24 @@ namespace TextBuddyTest
 			testTextBuddy.clearAllTasks();
 			
 		}
+		TEST_METHOD(Test_sort)
+		{
+			string fileName = "unitTestSort";
+			TextBuddy testTextBuddy(fileName);
+			testTextBuddy.addTask("hhh");
+			testTextBuddy.addTask("ggg");
+			testTextBuddy.addTask("bbb");
+			testTextBuddy.addTask("aaa");
+			testTextBuddy.addTask("eee");
+			testTextBuddy.addTask("fff");
+			testTextBuddy.addTask("ccc");
+			testTextBuddy.addTask("ddd");
+			
+			string searchResults = testTextBuddy.sortTasks();
+			string result = "aaa\nbbb\nccc\nddd\neee\nfff\nggg\nhhh\n";
 
+
+			Assert::AreSame(searchResults, result);	
+		}
 	};
 }

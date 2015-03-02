@@ -18,6 +18,7 @@ public:
         //feedback messages
         static const string WELCOME_MESSAGE;
         static const string MESSAGE_SEARCH_COMPLETED;
+		static const string MESSAGE_SORT_COMPLETED;
         static const string MESSAGE_NO_CONTENT;
         static const string MESSAGE_CONTENT_CLEARED;
         static const string MESSAGE_FILE_ERROR;
@@ -33,7 +34,7 @@ public:
         enum CommandType {
                 ADD_TASK, DELETE_TASK,
                 CLEAR_ALL_TASKS, DISPLAY_TASKS,
-                SEARCH_KEYWORD, GET_TOTAL_TASKS, EXIT,
+                SEARCH_KEYWORD,SORT_TASK, GET_TOTAL_TASKS, EXIT,
                 INVALID
         };
 
@@ -72,6 +73,7 @@ public:
         string displayTasks();
         string clearAllTasks();
 		string searchKeyword(string searchTerm);
+		string sortTasks();
 		string addTask(string validatedUserInput);
 
         TextBuddy(string inputFileName);

@@ -8,6 +8,7 @@
 //messages contain the word MESSAGE for easy searching and debugging
 const string TextBuddy::WELCOME_MESSAGE = "Welcome to TextBuddy. %s is ready for use.\n";
 const string TextBuddy::MESSAGE_SEARCH_COMPLETED = "Search Completed. ";
+const string TextBuddy::MESSAGE_SORT_COMPLETED = "Sort Completed. ";
 const string TextBuddy::MESSAGE_NO_CONTENT = "File is empty.\n";
 const string TextBuddy::MESSAGE_CONTENT_CLEARED = "all content deleted.\n";
 const string TextBuddy::MESSAGE_FILE_ERROR = "Unable to open file.";
@@ -68,6 +69,8 @@ string TextBuddy::executeCommand(string userInput) {
                         return displayTasks();
 				case SEARCH_KEYWORD:
                         return searchKeyword(text);
+				case SORT_TASK:
+					return sortTasks();
                 case CLEAR_ALL_TASKS:
                         return clearAllTasks();
                 case EXIT:
@@ -164,7 +167,7 @@ TextBuddy::CommandType TextBuddy::determineCommandType(string userCommand) {
         } else if(userCommand == "search" || userCommand == "-sc") {
                 return SEARCH_KEYWORD;
 		} else if(userCommand == "sort" || userCommand == "-s") {
-                return SEARCH_KEYWORD;
+                return SORT_TASK;
         } else if(userCommand == "total" || userCommand == "-tot") {
                 return GET_TOTAL_TASKS;
         } else if(userCommand == "exit" || userCommand == "-e") {
@@ -293,6 +296,30 @@ string TextBuddy::displayTasks() {
 
         return displayOutput.str();
 }
+string TextBuddy::sortTasks(){
+	    fstream fileStream;
+        fileStream.open(textFileName, fstream::in);
+		if(!fileStream.is_open()) {
+                throw(MESSAGE_FILE_ERROR);
+        }
+		string output;
+		vector <string> taskList;
+		for(int i=1; !getline(fileStream, output).fail(); i++) {
+			taskList.push_back(output);
+        }
+		sort(taskList.begin(),taskList.end(),less<string>());
+
+		stringstream sortedTaskList;
+		for(auto i = taskList.begin(); i != taskList.end(); ++i){
+			sortedTaskList << *i << endl;
+		}
+		sortedTaskList << MESSAGE_SORT_COMPLETED << endl;
+
+		fileStream.close();
+
+		return sortedTaskList.str();
+
+}
 string TextBuddy::searchKeyword(string searchTerm) {
         fstream fileStream;
         fileStream.open(textFileName, fstream::in);
@@ -316,6 +343,7 @@ string TextBuddy::searchKeyword(string searchTerm) {
 
         return searchResults.str();
 }
+
 //this method clears all tasks by truncating the file content
 string TextBuddy::clearAllTasks() {
         fstream fileStream;
