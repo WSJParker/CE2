@@ -12,7 +12,7 @@ using namespace std;
 
 class TextBuddy {
 
-private:
+public:
         string textFileName;
 
         //feedback messages
@@ -67,15 +67,16 @@ private:
         void writeTasksFromVectorToTextFile(vector<string>& taskList);
 
         //execution methods
-        string addTask(string validatedUserInput);
+        
         string deleteSingleTask(string text);
         string displayTasks();
         string clearAllTasks();
+		string searchKeyword(string searchTerm);
+		string addTask(string validatedUserInput);
 
-public:
         TextBuddy(string inputFileName);
         ~TextBuddy();
-
+        
         void showWelcomeMessage();
         void showToUser(string feedback);
 

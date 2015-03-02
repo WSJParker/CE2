@@ -66,6 +66,8 @@ string TextBuddy::executeCommand(string userInput) {
                         return deleteSingleTask(text);
                 case DISPLAY_TASKS:
                         return displayTasks();
+				case SEARCH_KEYWORD:
+                        return searchKeyword(text);
                 case CLEAR_ALL_TASKS:
                         return clearAllTasks();
                 case EXIT:
@@ -160,6 +162,8 @@ TextBuddy::CommandType TextBuddy::determineCommandType(string userCommand) {
         } else if(userCommand == "clear" || userCommand == "-c") {
                 return CLEAR_ALL_TASKS;
         } else if(userCommand == "search" || userCommand == "-sc") {
+                return SEARCH_KEYWORD;
+		} else if(userCommand == "sort" || userCommand == "-s") {
                 return SEARCH_KEYWORD;
         } else if(userCommand == "total" || userCommand == "-tot") {
                 return GET_TOTAL_TASKS;
@@ -289,7 +293,29 @@ string TextBuddy::displayTasks() {
 
         return displayOutput.str();
 }
+string TextBuddy::searchKeyword(string searchTerm) {
+        fstream fileStream;
+        fileStream.open(textFileName, fstream::in);
 
+        if(!fileStream.is_open()) {
+                throw(MESSAGE_FILE_ERROR);
+        }
+
+        string task;
+        stringstream searchResults;
+        regex rSearch(searchTerm);
+
+        for(int i=1; !getline(fileStream, task).fail(); i++) {
+                if(regex_search(task.begin(), task.end(), rSearch)) {
+                        searchResults << task << endl;
+				}
+        }
+        fileStream.close();
+
+        searchResults << MESSAGE_SEARCH_COMPLETED << endl;
+
+        return searchResults.str();
+}
 //this method clears all tasks by truncating the file content
 string TextBuddy::clearAllTasks() {
         fstream fileStream;
@@ -303,3 +329,4 @@ string TextBuddy::clearAllTasks() {
 
         return MESSAGE_CONTENT_CLEARED;
 }
+
